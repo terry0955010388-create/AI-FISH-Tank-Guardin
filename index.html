@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0e777c">
-<title>AI 魚缸智慧管家 V6.7</title>
+<title>AI 魚缸智慧管家 V6.8</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#edf5f6;color:#17343a;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC",sans-serif}.app{max-width:430px;margin:auto;min-height:100vh;background:#f8fbfb;padding-bottom:82px}.top{background:#fff;padding:18px 16px 12px;position:sticky;top:0;z-index:4}.brand{font-size:21px;font-weight:900}.muted{color:#71848b;font-size:12px}.tank{display:flex;justify-content:space-between;align-items:center;margin-top:10px}.tank select,.monthbar select{border:1px solid #dce7e9;border-radius:10px;padding:8px;background:#fff;font:inherit}.screen{display:none}.screen.active{display:block}.score{margin:14px 16px;padding:17px;border-radius:20px;background:#0e777c;color:#fff}.scoreline{display:flex;justify-content:space-between}.num{font-size:52px;font-weight:900}.health{background:#ddf5eb;color:#167d5c;border-radius:99px;padding:6px 9px;font-size:11px;font-weight:800}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 16px}.metric,.card{background:#fff;border:1px solid #dfe9eb;border-radius:17px}.metric{padding:13px}.metric .n{font-size:11px;color:#74868d}.metric .v{font-size:23px;font-weight:900;margin:3px 0}.ok{color:#168e69;font-size:11px;font-weight:800}.card{margin:12px 16px;padding:15px}.card h2{font-size:16px;margin:0 0 10px}.ai{border-left:5px solid #d69527}.ai p{font-size:13px;line-height:1.7}.btn{border:0;background:#0e777c;color:#fff;border-radius:11px;padding:11px 13px;font-weight:800}.full{width:100%}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e5edef;gap:10px}.row:last-child{border:0}.tag{border-radius:99px;padding:5px 8px;font-size:10px;font-weight:800}.tag.good{background:#e1f6ed;color:#16835e}.form{display:grid;gap:9px}.field label{display:block;font-size:11px;color:#71848b;margin-bottom:4px}.field input,.field select{width:100%;padding:14px;border:1px solid #dbe6e8;border-radius:10px;background:#fff;font:inherit}.hint{font-size:11px;color:#71848b;line-height:1.55}.goodbox{background:#eef8f5;padding:10px;border-radius:11px;font-size:12px;line-height:1.55}.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:70px;background:#fff;border-top:1px solid #dfe9eb;display:grid;grid-template-columns:repeat(5,1fr);z-index:5}.nav button{border:0;background:#fff;color:#74858b;font-size:10px}.nav button.active{color:#0e777c;font-weight:900}.nav b{display:block;font-size:18px}
 .monthbar{display:flex;align-items:center;justify-content:space-between;gap:8px}.monthbar>div{min-width:0}.legend{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}.legend button{border:1px solid #dfe9eb;background:#fff;border-radius:99px;padding:6px 8px;font-size:10px;font-weight:800}.legend button.off{opacity:.35}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}.chartbox{overflow:hidden;background:#f4f8f9;border-radius:13px;padding:6px}.chart{width:100%;height:235px}.chart svg{width:100%;height:100%;display:block}.axis{font-size:9px;fill:#71848b}.gridline{stroke:#dfe9eb;stroke-width:1}.daydot{stroke:#fff;stroke-width:1.2}.monthnote{font-size:11px;color:#71848b;line-height:1.55;margin-top:8px}.daygrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:10px}.day{background:#f4f8f9;border-radius:9px;min-height:43px;padding:5px;text-align:center;font-size:10px}.day.has{background:#e8f5f3;font-weight:800}.day .s{margin-top:3px;font-size:9px;color:#71848b}.subchart{margin-top:12px}.subhead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:4px 2px 6px;font-size:12px}.subhead b{font-size:13px}.latestgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.latest{border:1px solid #e0eaec;border-radius:12px;padding:10px}.latest b{font-size:11px}.latest strong{display:block;font-size:19px;margin-top:2px}.latest small{color:#71848b;font-size:9px}
@@ -16,10 +16,20 @@
 .day{border:1px solid #dfe9eb;border-radius:10px;background:#f7fafb;padding:7px 4px;text-align:center;font-size:12px;color:#6f8187}
 .day.has{border-color:#8fcfd0;background:#eefafa;color:#0e777c;font-weight:800}
 .day .s{font-size:10px;margin-top:3px;color:#8a999e}
+
+.axis-note{margin:12px 0 10px;font-size:12px;line-height:1.7;color:#71858b}
+.axis-note span{font-weight:800}
+.mini-charts{display:grid;grid-template-columns:1fr;gap:12px;margin:12px 0 16px}
+.mini-chart{border:1px solid #dfe9eb;border-radius:16px;background:#fff;padding:12px}
+.chart-title{font-size:16px;font-weight:900;color:#0d5960;margin-bottom:8px}
+.chart-title small{font-size:11px;font-weight:700;color:#829398;margin-left:5px}
+.chart-body{height:145px;border-radius:10px;background:#f6fafb;position:relative;overflow:hidden}
+.chart-body:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0,transparent 35px,#dce8ea 36px)}
+@media(min-width:700px){.mini-charts{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body><div class="app">
-<div class="top"><div class="brand">🐟 AI 魚缸智慧管家</div><div class="muted">V6.7 · 儀器＋試紙估測＋日期版</div><div class="tank"><select><option>我的黑蓮燈缸 · 20 L</option></select><span class="muted">● 手動模式</span></div></div>
+<div class="top"><div class="brand">🐟 AI 魚缸智慧管家</div><div class="muted">V6.8 · 六項獨立實際刻度版</div><div class="tank"><select><option>我的黑蓮燈缸 · 20 L</option></select><span class="muted">● 手動模式</span></div></div>
 
 <section id="home" class="screen">
 <div class="score"><div class="scoreline"><div><div style="font-size:12px;color:#cfe5e6">魚缸健康度</div><div class="num" id="score">--</div></div><span class="health" id="status">等待輸入</span></div><div style="font-size:12px;color:#d9eeee">先輸入水質資料，AI 才開始判斷。</div></div>

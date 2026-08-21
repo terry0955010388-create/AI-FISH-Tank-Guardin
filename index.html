@@ -48,7 +48,7 @@ function saveTank(){db.tank={species:species.value,volume:Number(volume.value),c
 function analyze(){
 let r={ph:+ph.value,do:+document.getElementById('do').value,orp:+orp.value,ec:+ec.value,tds:+tds.value,temp:+temp.value,time:time.value||new Date().toISOString()};
 if(!r.ph||!r.do||!r.temp){alert('至少需要輸入 pH、DO、水溫。');return}
-db.readings.unshift(r);db.readings=db.readings.slice(0,100);save();runAI(r);show('home',document.querySelector('.nav button'));
+db.readings.unshift(r);pruneOldData();save();runAI(r);show('home',document.querySelector('.nav button'));
 }
 function runAI(r){
 let issues=[],score=100;
@@ -66,12 +66,26 @@ document.getElementById('purchase').innerHTML=`<div class="goodbox"><b>${purchas
 renderMetrics(r);renderLogs();
 }
 function renderMetrics(r){let a=[['pH',r.ph,'輸入'],['DO',r.do+' mg/L','輸入'],['ORP',r.orp?r.orp+' mV':'—','可選'],['EC',r.ec?r.ec+' µS/cm':'—','可選'],['溫度',r.temp+'°C','輸入']];document.getElementById('metrics').innerHTML=a.map(x=>`<div class="metric"><div class="n">${x[0]}</div><div class="v">${x[1]}</div><div class="ok">${x[2]}</div></div>`).join('')}
-function saveEvent(){let type=etype.value,note=enote.value||'無備註';db.events.unshift({type,note,time:new Date().toLocaleString()});save();enote.value='';renderLogs()}
+function saveEvent(){let type=etype.value,note=enote.value||'無備註';db.events.unshift({type,note,time:new Date().toISOString()});pruneOldData();save();enote.value='';renderLogs()}
 function formatReadingTime(t){
   if(!t)return '未指定時間';
   const d=new Date(t);
   if(Number.isNaN(d.getTime()))return t;
   return d.toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+}
+const RETENTION_YEARS=3;
+function pruneOldData(){
+  const cutoff=new Date();
+  cutoff.setFullYear(cutoff.getFullYear()-RETENTION_YEARS);
+  const cutoffMs=cutoff.getTime();
+  db.readings=db.readings.filter(r=>{
+    const t=new Date(r.time||0).getTime();
+    return Number.isFinite(t) && t>=cutoffMs;
+  });
+  db.events=db.events.filter(e=>{
+    const t=new Date(e.time||0).getTime();
+    return Number.isFinite(t) && t>=cutoffMs;
+  });
 }
 function renderLogs(){
   const readingItems=db.readings.map((r,i)=>({
@@ -85,8 +99,9 @@ function renderLogs(){
     html:`<div class="row"><div><b>${e.type}</b><div class="muted">${e.note}</div></div><span class="muted">${e.time}</span></div>`
   }));
   const items=[...readingItems,...eventItems].sort((a,b)=>new Date(b.time).getTime()-new Date(a.time).getTime());
-  logs.innerHTML=items.length?items.slice(0,30).map(x=>x.html).join(''):'<div class="muted">尚無紀錄</div>';
+  logs.innerHTML=items.length?items.map(x=>x.html).join(''):'<div class="muted">尚無紀錄</div>';
 }
+pruneOldData();save();
 if(db.readings[0]){let r=db.readings[0];['ph','do','orp','ec','tds','temp'].forEach(k=>{let el=document.getElementById(k);if(el&&r[k])el.value=r[k]});runAI(r)}else{document.getElementById('metrics').innerHTML='<div class="metric"><div class="n">pH</div><div class="v">—</div><div class="muted">待輸入</div></div><div class="metric"><div class="n">DO</div><div class="v">—</div><div class="muted">待輸入</div></div>'}
 renderLogs();
 </script>

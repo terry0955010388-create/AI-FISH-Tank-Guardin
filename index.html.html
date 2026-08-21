@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0e777c"><title>AI 魚缸智慧管家 V6</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf5f6;color:#17343a;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC",sans-serif}.app{max-width:430px;margin:auto;min-height:100vh;background:#f8fbfb;padding-bottom:82px}.top{background:#fff;padding:18px 16px 12px;position:sticky;top:0;z-index:3}.brand{font-size:21px;font-weight:900}.muted{color:#71848b;font-size:12px}.tank{display:flex;justify-content:space-between;align-items:center;margin-top:10px}.tank select{border:1px solid #dce7e9;border-radius:10px;padding:7px;background:#fff}.screen{display:none}.screen.active{display:block}.score{margin:14px 16px;padding:17px;border-radius:20px;background:#0e777c;color:white}.scoreline{display:flex;justify-content:space-between}.num{font-size:52px;font-weight:900}.health{background:#ddf5eb;color:#167d5c;border-radius:99px;padding:6px 9px;font-size:11px;font-weight:800}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 16px}.metric,.card{background:#fff;border:1px solid #dfe9eb;border-radius:17px}.metric{padding:13px}.metric .n{font-size:11px;color:#74868d}.metric .v{font-size:23px;font-weight:900;margin:3px 0}.ok{color:#168e69;font-size:11px;font-weight:800}.warn{color:#d38a20;font-size:11px;font-weight:800}.card{margin:12px 16px;padding:15px}.card h2{font-size:16px;margin:0 0 10px}.ai{border-left:5px solid #d69527}.ai p{font-size:13px;line-height:1.7}.btn{border:0;background:#0e777c;color:white;border-radius:11px;padding:11px 13px;font-weight:800}.full{width:100%}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e5edef;gap:10px}.row:last-child{border:0}.tag{border-radius:99px;padding:5px 8px;font-size:10px;font-weight:800}.tag.good{background:#e1f6ed;color:#16835e}.tag.warn{background:#fff2d9;color:#c77d12}.form{display:grid;gap:9px}.field label{display:block;font-size:11px;color:#71848b;margin-bottom:4px}.field input,.field select{width:100%;padding:14px;border:1px solid #dbe6e8;border-radius:10px;background:white;font:inherit}.hint{font-size:11px;color:#71848b;line-height:1.55}.chart{height:105px;display:flex;align-items:end;gap:3px;background:#f4f8f9;padding:9px;border-radius:12px}.bar{flex:1;background:#65a9ac;border-radius:3px 3px 0 0}.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:70px;background:#fff;border-top:1px solid #dfe9eb;display:grid;grid-template-columns:repeat(5,1fr);z-index:5}.nav button{border:0;background:#fff;color:#74858b;font-size:10px}.nav button.active{color:#0e777c;font-weight:900}.nav b{display:block;font-size:18px}.danger{background:#fff0ef;color:#a84b47;padding:10px;border-radius:11px;font-size:12px;line-height:1.55}.goodbox{background:#eef8f5;padding:10px;border-radius:11px;font-size:12px;line-height:1.55}
+</style>
+</head>
+<body><div class="app">
+<div class="top"><div class="brand">🐟 AI 魚缸智慧管家</div><div class="muted">V6 · 手動輸入版</div><div class="tank"><select><option>我的黑蓮燈缸 · 20 L</option></select><span class="muted">● 手動模式</span></div></div>
+
+<section id="home" class="screen">
+<div class="score"><div class="scoreline"><div><div style="font-size:12px;color:#cfe5e6">魚缸健康度</div><div class="num" id="score">--</div></div><span class="health" id="status">等待輸入</span></div><div style="font-size:12px;color:#d9eeee">先輸入水質資料，AI 才開始判斷。</div></div>
+<div class="grid" id="metrics"></div>
+<div class="card ai"><h2>🤖 AI 管家</h2><div id="finding"><p>目前還沒有足夠資料。請到「輸入」頁面填寫最近一次水質測試結果。</p></div><button class="btn full" onclick="show('input')">輸入水質資料</button></div>
+<div class="card"><h2>📌 今日建議</h2><div id="actions"><div class="muted">完成第一次輸入後，這裡會顯示具體建議。</div></div></div>
+</section>
+
+<section id="input" class="screen active">
+<div class="card"><h2>🧪 手動輸入水質</h2><div style="font-size:13px;font-weight:800;color:#0e777c;margin-bottom:8px">請直接點下面的白色框輸入數字</div><div class="hint">消費者可以使用試紙、滴定測試盒或水質儀器，把結果輸入 APP。輸入後 AI 立即分析。</div></div>
+<div class="card"><div class="form">
+<div class="field"><label>pH</label><input id="ph" type="number" step="0.01" placeholder="例如 6.6"></div>
+<div class="field"><label>溶氧 DO（mg/L）</label><input id="do" type="number" step="0.1" placeholder="例如 6.8"></div>
+<div class="field"><label>ORP（mV）</label><input id="orp" type="number" step="1" placeholder="例如 280"></div>
+<div class="field"><label>EC（µS/cm）</label><input id="ec" type="number" step="1" placeholder="例如 180"></div>
+<div class="field"><label>TDS（ppm，可選）</label><input id="tds" type="number" step="1" placeholder="例如 100"></div>
+<div class="field"><label>水溫（°C）</label><input id="temp" type="number" step="0.1" placeholder="例如 29.0"></div>
+<div class="field"><label>測量時間</label><input id="time" type="datetime-local"></div>
+<button class="btn full" onclick="analyze()">開始 AI 分析</button>
+</div></div>
+<div class="card"><h2>📋 測量方式</h2><div class="hint">未來可以選擇「試紙／滴定／數位儀器／自動感測器」，讓 AI 知道資料可信度與測量誤差。</div></div>
+</section>
+
+<section id="ai" class="screen"><div class="card ai"><h2>🧠 AI 分析結果</h2><div id="analysis"><div class="muted">請先輸入一次水質資料。</div></div></div><div class="card"><h2>🛒 商品決策</h2><div id="purchase"><div class="goodbox"><b>目前不推薦任何商品。</b><br>AI 會先判斷是否能用換水、打氣、清潔或調整餵食等方式處理。</div></div></div></section>
+
+<section id="log" class="screen"><div class="card"><h2>📝 魚缸紀錄</h2><div class="form"><select id="etype"><option>餵食</option><option>換水</option><option>清洗濾棉</option><option>添加硝化菌</option><option>魚隻異常</option></select><input id="enote" placeholder="備註"><button class="btn" onclick="saveEvent()">儲存</button></div></div><div class="card"><h2>最近紀錄</h2><div id="logs" class="muted">尚無紀錄</div></div></section>
+
+<section id="settings" class="screen"><div class="card"><h2>⚙️ 魚缸資料</h2><div class="form"><div class="field"><label>魚種</label><input id="species" value="黑蓮燈"></div><div class="field"><label>容量（L）</label><input id="volume" value="20"></div><div class="field"><label>魚數量</label><input id="count" value="10"></div><div class="field"><label>過濾系統</label><input id="filter" value="小米原廠過濾"></div><button class="btn" onclick="saveTank()">儲存魚缸資料</button></div></div><div class="card"><h2>🎯 第一階段產品策略</h2><div class="goodbox"><b>不需要感測器。</b><br>先讓一般消費者手動輸入水質，驗證「AI 能不能真正幫助養魚」。確認使用者願意使用後，再接自動感測器。</div></div></section>
+
+<div class="nav"><button onclick="show('home',this)"><b>⌂</b>總覽</button><button class="active" onclick="show('input',this)"><b>＋</b>輸入</button><button onclick="show('ai',this)"><b>✦</b>AI</button><button onclick="show('log',this)"><b>☷</b>紀錄</button><button onclick="show('settings',this)"><b>⚙</b>設定</button></div>
+</div>
+<script>
+const KEY='fishTankManualV6';let db=JSON.parse(localStorage.getItem(KEY)||'null')||{tank:{species:'黑蓮燈',volume:20,count:10,filter:'小米原廠過濾'},events:[],readings:[]};
+function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+function show(id,el){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(el)el.classList.add('active')}
+function saveTank(){db.tank={species:species.value,volume:Number(volume.value),count:Number(count.value),filter:filter.value};save();alert('魚缸資料已保存');}
+function analyze(){
+let r={ph:+ph.value,do:+document.getElementById('do').value,orp:+orp.value,ec:+ec.value,tds:+tds.value,temp:+temp.value,time:time.value||new Date().toISOString()};
+if(!r.ph||!r.do||!r.temp){alert('至少需要輸入 pH、DO、水溫。');return}
+db.readings.unshift(r);db.readings=db.readings.slice(0,100);save();runAI(r);show('home',document.querySelector('.nav button'));
+}
+function runAI(r){
+let issues=[],score=100;
+if(r.temp>29){issues.push('水溫偏高');score-=8}
+if(r.do<5){issues.push('溶氧偏低');score-=20}else if(r.do<6){issues.push('溶氧值得注意');score-=10}
+if(r.ph<6||r.ph>7.5){issues.push('pH 超出目前示範魚種的建議觀察區間');score-=12}
+let finding=issues.length?issues.join('、')+'。':'目前輸入的主要指標沒有明顯異常。';
+let action=r.do<6?'優先增加打氣／水面擾動，並重新測量。':r.temp>29?'優先改善降溫與水面擾動。':'維持目前管理，持續觀察趨勢。';
+let purchase='目前不推薦購買任何產品。先用免費或低成本方式處理，再看下一次測量。';
+document.getElementById('score').textContent=Math.max(0,score);document.getElementById('status').textContent=score>=80?'● 穩定':score>=60?'● 注意':'● 警戒';
+document.getElementById('finding').innerHTML=`<p><b>發生什麼：</b>${finding}</p><p><b>現在做什麼：</b>${action}</p>`;
+document.getElementById('actions').innerHTML=`<div class="row"><b>優先處理</b><span>${action}</span></div><div class="row"><b>下一次測量</b><span>完成處理後再測一次</span></div><div class="row"><b>購買</b><span class="tag good">目前不需要</span></div>`;
+document.getElementById('analysis').innerHTML=`<p><b>魚缸：</b>${db.tank.species} × ${db.tank.count} · ${db.tank.volume} L</p><p><b>本次資料：</b>pH ${r.ph}｜DO ${r.do} mg/L｜ORP ${r.orp||'未輸入'} mV｜EC ${r.ec||'未輸入'} µS/cm｜溫度 ${r.temp}°C</p><p><b>AI 判斷：</b>${finding}</p><p><b>建議：</b>${action}</p><div class="notice goodbox"><b>決策原則：</b>先處理問題，再決定是否需要購買產品。</div>`;
+document.getElementById('purchase').innerHTML=`<div class="goodbox"><b>${purchase}</b></div>`;
+renderMetrics(r);renderLogs();
+}
+function renderMetrics(r){let a=[['pH',r.ph,'輸入'],['DO',r.do+' mg/L','輸入'],['ORP',r.orp?r.orp+' mV':'—','可選'],['EC',r.ec?r.ec+' µS/cm':'—','可選'],['溫度',r.temp+'°C','輸入']];document.getElementById('metrics').innerHTML=a.map(x=>`<div class="metric"><div class="n">${x[0]}</div><div class="v">${x[1]}</div><div class="ok">${x[2]}</div></div>`).join('')}
+function saveEvent(){let type=etype.value,note=enote.value||'無備註';db.events.unshift({type,note,time:new Date().toLocaleString()});save();enote.value='';renderLogs()}
+function formatReadingTime(t){
+  if(!t)return '未指定時間';
+  const d=new Date(t);
+  if(Number.isNaN(d.getTime()))return t;
+  return d.toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+}
+function renderLogs(){
+  const readingItems=db.readings.map((r,i)=>({
+    kind:'reading',
+    time:r.time||'',
+    html:`<div class="row"><div><b>🧪 水質測量</b><div class="muted">pH ${r.ph}｜DO ${r.do} mg/L｜溫度 ${r.temp}°C${r.orp?'｜ORP '+r.orp+' mV':''}${r.ec?'｜EC '+r.ec+' µS/cm':''}${r.tds?'｜TDS '+r.tds+' ppm':''}</div></div><span class="muted">${formatReadingTime(r.time)}</span></div>`
+  }));
+  const eventItems=db.events.map(e=>({
+    kind:'event',
+    time:e.time||'',
+    html:`<div class="row"><div><b>${e.type}</b><div class="muted">${e.note}</div></div><span class="muted">${e.time}</span></div>`
+  }));
+  const items=[...readingItems,...eventItems].sort((a,b)=>new Date(b.time).getTime()-new Date(a.time).getTime());
+  logs.innerHTML=items.length?items.slice(0,30).map(x=>x.html).join(''):'<div class="muted">尚無紀錄</div>';
+}
+if(db.readings[0]){let r=db.readings[0];['ph','do','orp','ec','tds','temp'].forEach(k=>{let el=document.getElementById(k);if(el&&r[k])el.value=r[k]});runAI(r)}else{document.getElementById('metrics').innerHTML='<div class="metric"><div class="n">pH</div><div class="v">—</div><div class="muted">待輸入</div></div><div class="metric"><div class="n">DO</div><div class="v">—</div><div class="muted">待輸入</div></div>'}
+renderLogs();
+</script>
+</body></html>

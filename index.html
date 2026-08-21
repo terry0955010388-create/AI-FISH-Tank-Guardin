@@ -2,13 +2,28 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0e777c"><title>AI 魚缸智慧管家 V6</title>
+<meta name="theme-color" content="#0e777c"><title>AI 魚缸智慧管家 V6.2</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#edf5f6;color:#17343a;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC",sans-serif}.app{max-width:430px;margin:auto;min-height:100vh;background:#f8fbfb;padding-bottom:82px}.top{background:#fff;padding:18px 16px 12px;position:sticky;top:0;z-index:3}.brand{font-size:21px;font-weight:900}.muted{color:#71848b;font-size:12px}.tank{display:flex;justify-content:space-between;align-items:center;margin-top:10px}.tank select{border:1px solid #dce7e9;border-radius:10px;padding:7px;background:#fff}.screen{display:none}.screen.active{display:block}.score{margin:14px 16px;padding:17px;border-radius:20px;background:#0e777c;color:white}.scoreline{display:flex;justify-content:space-between}.num{font-size:52px;font-weight:900}.health{background:#ddf5eb;color:#167d5c;border-radius:99px;padding:6px 9px;font-size:11px;font-weight:800}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 16px}.metric,.card{background:#fff;border:1px solid #dfe9eb;border-radius:17px}.metric{padding:13px}.metric .n{font-size:11px;color:#74868d}.metric .v{font-size:23px;font-weight:900;margin:3px 0}.ok{color:#168e69;font-size:11px;font-weight:800}.warn{color:#d38a20;font-size:11px;font-weight:800}.card{margin:12px 16px;padding:15px}.card h2{font-size:16px;margin:0 0 10px}.ai{border-left:5px solid #d69527}.ai p{font-size:13px;line-height:1.7}.btn{border:0;background:#0e777c;color:white;border-radius:11px;padding:11px 13px;font-weight:800}.full{width:100%}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e5edef;gap:10px}.row:last-child{border:0}.tag{border-radius:99px;padding:5px 8px;font-size:10px;font-weight:800}.tag.good{background:#e1f6ed;color:#16835e}.tag.warn{background:#fff2d9;color:#c77d12}.form{display:grid;gap:9px}.field label{display:block;font-size:11px;color:#71848b;margin-bottom:4px}.field input,.field select{width:100%;padding:14px;border:1px solid #dbe6e8;border-radius:10px;background:white;font:inherit}.hint{font-size:11px;color:#71848b;line-height:1.55}.chart{height:105px;display:flex;align-items:end;gap:3px;background:#f4f8f9;padding:9px;border-radius:12px}.bar{flex:1;background:#65a9ac;border-radius:3px 3px 0 0}.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:70px;background:#fff;border-top:1px solid #dfe9eb;display:grid;grid-template-columns:repeat(5,1fr);z-index:5}.nav button{border:0;background:#fff;color:#74858b;font-size:10px}.nav button.active{color:#0e777c;font-weight:900}.nav b{display:block;font-size:18px}.danger{background:#fff0ef;color:#a84b47;padding:10px;border-radius:11px;font-size:12px;line-height:1.55}.goodbox{background:#eef8f5;padding:10px;border-radius:11px;font-size:12px;line-height:1.55}
+
+.trend-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.trend-sub{font-size:11px;color:#71848b;line-height:1.5}
+.trend-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.trend-card{border:1px solid #dfe9eb;border-radius:14px;padding:11px;background:#fbfdfd}
+.trend-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.trend-name{font-size:12px;font-weight:900}
+.trend-value{font-size:20px;font-weight:900}
+.trend-meta{font-size:10px;color:#71848b;margin-top:2px}
+.trend-up{color:#c77d12}.trend-down{color:#16835e}.trend-flat{color:#71848b}
+.spark{width:100%;height:64px;margin-top:7px;display:block}
+.spark-bg{fill:#f2f7f7}
+.spark-line{fill:none;stroke:#0e777c;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.spark-dot{fill:#0e777c}
+.trend-empty{padding:12px;border-radius:11px;background:#f4f8f9;color:#71848b;font-size:12px;line-height:1.6}
 </style>
 </head>
 <body><div class="app">
-<div class="top"><div class="brand">🐟 AI 魚缸智慧管家</div><div class="muted">V6.1 · 手動輸入版</div><div class="tank"><select><option>我的黑蓮燈缸 · 20 L</option></select><span class="muted">● 手動模式</span></div></div>
+<div class="top"><div class="brand">🐟 AI 魚缸智慧管家</div><div class="muted">V6.2 · 手動輸入版</div><div class="tank"><select><option>我的黑蓮燈缸 · 20 L</option></select><span class="muted">● 手動模式</span></div></div>
 
 <section id="home" class="screen">
 <div class="score"><div class="scoreline"><div><div style="font-size:12px;color:#cfe5e6">魚缸健康度</div><div class="num" id="score">--</div></div><span class="health" id="status">等待輸入</span></div><div style="font-size:12px;color:#d9eeee">先輸入水質資料，AI 才開始判斷。</div></div>
@@ -34,7 +49,21 @@
 
 <section id="ai" class="screen"><div class="card ai"><h2>🧠 AI 分析結果</h2><div id="analysis"><div class="muted">請先輸入一次水質資料。</div></div></div><div class="card"><h2>🛒 商品決策</h2><div id="purchase"><div class="goodbox"><b>目前不推薦任何商品。</b><br>AI 會先判斷是否能用換水、打氣、清潔或調整餵食等方式處理。</div></div></div></section>
 
-<section id="log" class="screen"><div class="card"><h2>📝 魚缸紀錄</h2><div class="form"><select id="etype"><option>餵食</option><option>換水</option><option>清洗濾棉</option><option>添加硝化菌</option><option>魚隻異常</option></select><input id="enote" placeholder="備註"><button class="btn" onclick="saveEvent()">儲存</button></div></div><div class="card"><h2>最近紀錄</h2><div id="logs" class="muted">尚無紀錄</div></div></section>
+<section id="log" class="screen">
+<div class="card">
+  <h2>📝 魚缸紀錄</h2>
+  <div class="form">
+    <select id="etype"><option>餵食</option><option>換水</option><option>清洗濾棉</option><option>添加硝化菌</option><option>魚隻異常</option></select>
+    <input id="enote" placeholder="備註">
+    <button class="btn" onclick="saveEvent()">儲存</button>
+  </div>
+</div>
+<div class="card">
+  <div class="trend-head"><div><h2 style="margin-bottom:2px">📊 水質趨勢</h2><div class="trend-sub">用最近 10 次水質測量，觀察 pH、DO、溫度等變化。</div></div><span class="tag good">V6.2</span></div>
+  <div id="trends" class="trend-grid" style="margin-top:10px"></div>
+</div>
+<div class="card"><h2>最近紀錄</h2><div id="logs" class="muted">尚無紀錄</div></div>
+</section>
 
 <section id="settings" class="screen"><div class="card"><h2>⚙️ 魚缸資料</h2><div class="form"><div class="field"><label>魚種</label><input id="species" value="黑蓮燈"></div><div class="field"><label>容量（L）</label><input id="volume" value="20"></div><div class="field"><label>魚數量</label><input id="count" value="10"></div><div class="field"><label>過濾系統</label><input id="filter" value="小米原廠過濾"></div><button class="btn" onclick="saveTank()">儲存魚缸資料</button></div></div><div class="card"><h2>🎯 第一階段產品策略</h2><div class="goodbox"><b>不需要感測器。</b><br>先讓一般消費者手動輸入水質，驗證「AI 能不能真正幫助養魚」。確認使用者願意使用後，再接自動感測器。</div></div></section>
 
@@ -84,6 +113,61 @@ document.getElementById('purchase').innerHTML=`<div class="goodbox"><b>${purchas
 renderMetrics(r);renderLogs();
 }
 function renderMetrics(r){let a=[['pH',r.ph,'輸入'],['DO',r.do+' mg/L','輸入'],['ORP',r.orp?r.orp+' mV':'—','可選'],['EC',r.ec?r.ec+' µS/cm':'—','可選'],['溫度',r.temp+'°C','輸入']];document.getElementById('metrics').innerHTML=a.map(x=>`<div class="metric"><div class="n">${x[0]}</div><div class="v">${x[1]}</div><div class="ok">${x[2]}</div></div>`).join('')}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function trendNumber(v){
+  const n=Number(v);
+  return Number.isFinite(n)?n:null;
+}
+function sparkline(values){
+  const vals=values.map(trendNumber).filter(v=>v!==null);
+  if(vals.length<2)return '<div class="trend-empty">需要至少 2 次有效測量，才可以畫出趨勢。</div>';
+  const w=320,h=64,p=7;
+  let min=Math.min(...vals),max=Math.max(...vals);
+  if(min===max){min-=1;max+=1}
+  const points=vals.map((v,i)=>{
+    const x=p+(w-2*p)*(i/(vals.length-1));
+    const y=h-p-(h-2*p)*((v-min)/(max-min));
+    return [x,y];
+  });
+  const poly=points.map(p=>p.join(',')).join(' ');
+  const dots=points.map(p=>`<circle class="spark-dot" cx="${p[0]}" cy="${p[1]}" r="2.6"></circle>`).join('');
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-label="水質趨勢圖"><rect class="spark-bg" x="0" y="0" width="${w}" height="${h}" rx="9"></rect><polyline class="spark-line" points="${poly}"></polyline>${dots}</svg>`;
+}
+function renderTrends(){
+  const box=document.getElementById('trends');
+  if(!box)return;
+  const rows=[...db.readings]
+    .filter(r=>r&&r.time)
+    .sort((a,b)=>new Date(a.time).getTime()-new Date(b.time).getTime())
+    .slice(-10);
+  if(!rows.length){
+    box.innerHTML='<div class="trend-empty">目前還沒有水質測量資料。先輸入至少 1 次測量，之後就會在這裡看到趨勢。</div>';
+    return;
+  }
+  const defs=[
+    ['pH','pH','',2],
+    ['溶氧 DO','do',' mg/L',1],
+    ['水溫','temp','°C',1],
+    ['ORP','orp',' mV',0],
+    ['EC','ec',' µS/cm',0],
+    ['TDS','tds',' ppm',0]
+  ];
+  box.innerHTML=defs.map(([label,key,unit,dec])=>{
+    const vals=rows.map(r=>trendNumber(r[key])).filter(v=>v!==null);
+    if(!vals.length)return '';
+    const latest=vals[vals.length-1], first=vals[0], diff=latest-first;
+    const eps=dec===0?0.5:0.005;
+    const cls=Math.abs(diff)<=eps?'trend-flat':diff>0?'trend-up':'trend-down';
+    const arrow=Math.abs(diff)<=eps?'→':diff>0?'↑':'↓';
+    const diffText=Math.abs(diff)<=eps?'穩定':`${arrow} ${Math.abs(diff).toFixed(dec)}${unit}`;
+    const latestText=latest.toFixed(dec);
+    const dateText=rows[rows.length-1].time?formatReadingTime(rows[rows.length-1].time):'';
+    return `<div class="trend-card"><div class="trend-top"><div><div class="trend-name">${label}</div><div class="trend-meta">最近 ${vals.length} 次測量 · ${escapeHtml(dateText)}</div></div><div style="text-align:right"><div class="trend-value">${latestText}${unit}</div><div class="${cls} trend-meta">${diffText}</div></div></div>${sparkline(vals)}</div>`;
+  }).join('');
+}
 function saveEvent(){let type=etype.value,note=enote.value||'無備註';db.events.unshift({type,note,time:new Date().toLocaleString()});save();enote.value='';renderLogs()}
 function formatReadingTime(t){
   if(!t)return '未指定時間';
@@ -104,6 +188,7 @@ function renderLogs(){
   }));
   const items=[...readingItems,...eventItems].sort((a,b)=>new Date(b.time).getTime()-new Date(a.time).getTime());
   logs.innerHTML=items.length?items.slice(0,30).map(x=>x.html).join(''):'<div class="muted">尚無紀錄</div>';
+  renderTrends();
 }
 document.getElementById('species').value=db.tank.species??'黑蓮燈';
 document.getElementById('volume').value=Number.isFinite(Number(db.tank.volume))?db.tank.volume:20;
